@@ -38,8 +38,7 @@ public class CameraControl : MonoBehaviour
             camera.transform.position = new Vector3(newPos.x, camera.transform.position.y, newPos.z);
         }
 
-        print(Input.GetAxis("Mouse X"));
-        
+
         if (Input.GetMouseButton(1))
         {
             var dif = (Vector2)Input.mousePosition - startMouseInput;
@@ -53,7 +52,6 @@ public class CameraControl : MonoBehaviour
             startMouseInput = Input.mousePosition; 
         }
 
-        print(Input.GetAxis("Mouse X"));
 
         if (Input.GetMouseButtonDown(1))
         {
