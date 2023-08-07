@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Mine : Building
 {
+    public GameObject coinAnim;
     public override void Destroy()
     {
         print("Mine destroyed !");
@@ -22,7 +23,13 @@ public class Mine : Building
         return 0;
     }
 
-    public override void PlayAnimation(){
-
+    public override void PlayAnimation()
+    {
+        if (activePerson != null)
+        {
+            var tmp = Instantiate(coinAnim, activePerson.transform.position, new Quaternion());
+            tmp.transform.SetParent(activePerson.transform);
+            Destroy(tmp, 1.8f);
+        }
     }
 }

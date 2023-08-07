@@ -107,5 +107,8 @@ MonoBehaviour:
   center: {fileID: 0}
   buildingTypes: 
   personTypes: 
+  activePerson: {fileID: 0}
   movement: {fileID: 0}
   investAmount: 5
+  coinAnim: {fileID: 1699203962674669136, guid: d1630d0c683a22d4bab2de2e04b146bc,
+    type: 3}

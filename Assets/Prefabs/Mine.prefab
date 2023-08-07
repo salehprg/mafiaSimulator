@@ -124,6 +124,8 @@ MonoBehaviour:
   payment: 7
   waitTime: 2
   activePerson: {fileID: 0}
+  coinAnim: {fileID: 1699203962674669136, guid: d1630d0c683a22d4bab2de2e04b146bc,
+    type: 3}
 --- !u!54 &7137236875368327846
 Rigidbody:
   m_ObjectHideFlags: 0

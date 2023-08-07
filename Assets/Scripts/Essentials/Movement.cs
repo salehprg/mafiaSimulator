@@ -41,8 +41,12 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        if (goal != null)
-            agent.SetDestination(goal.position);
+        try
+        {
+            if (goal != null)
+                agent.SetDestination(goal.position);
+        }
+        catch { }
     }
 
     public bool IsReached()

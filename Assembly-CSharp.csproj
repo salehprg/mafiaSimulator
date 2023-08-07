@@ -47,7 +47,6 @@
      <Compile Include="Assets\Scripts\Persons\Thief.cs" />
      <Compile Include="Assets\Scripts\UILookAt.cs" />
      <Compile Include="Assets\Scripts\Buildings\House.cs" />
-     <Compile Include="Assets\Scripts\Gamemanager.cs" />
      <Compile Include="Assets\Scripts\Interfaces\IBuilding.cs" />
      <Compile Include="Assets\Scripts\Camera Control.cs" />
      <Compile Include="Assets\Scripts\Persons\Assassin.cs" />
@@ -64,6 +63,7 @@
      <Compile Include="Assets\Scripts\Persons\Investor.cs" />
      <Compile Include="Assets\Scripts\Essentials\Wallet.cs" />
      <Compile Include="Assets\Scripts\Buildings\Mine.cs" />
+     <Compile Include="Assets\Scripts\GameManagerr.cs" />
      <Compile Include="Assets\Scripts\Enums\PersonStatus.cs" />
      <Compile Include="Assets\Scripts\Essentials\Splitter.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

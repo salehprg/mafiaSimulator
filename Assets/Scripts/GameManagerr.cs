@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManagerr : MonoBehaviour
 {
 
-    public static GameManager instance;
+    public static GameManagerr instance;
 
     public Dictionary<PersonStatus, GameObject> status;
     public List<GameObject> peopleList;
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] prisons;
     public GameObject[] policeStations;
 
-    public GameManager()
+    public GameManagerr()
     {
         instance = this;
     }
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
 
                         newObj.transform.localScale = scale;
                     }
-
+                    
                     Destroy(deadPrsn.gameObject);
                     waitTime = Time.time + interval;
 

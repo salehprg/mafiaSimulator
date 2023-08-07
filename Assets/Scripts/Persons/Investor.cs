@@ -5,6 +5,7 @@ using UnityEngine;
 public class Investor : Person
 {
     public float investAmount;
+    public GameObject coinAnim;
 
     public override void OnStart()
     {
@@ -24,6 +25,8 @@ public class Investor : Person
         {
             wallet.DepositBalance(investAmount);
             waitTime = Time.time + idleTime;
+            
+            FinishJobPlayAnim(target);
         }
     }
 
@@ -39,5 +42,12 @@ public class Investor : Person
             }
         }
 
+    }
+
+    public override void FinishJobPlayAnim(ITargetable target)
+    {
+        var tmp = Instantiate(coinAnim, (target as MonoBehaviour).transform.position, new Quaternion());
+        tmp.transform.SetParent((target as MonoBehaviour).transform);
+        Destroy(tmp, 1f);
     }
 }

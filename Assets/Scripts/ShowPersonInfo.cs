@@ -15,14 +15,14 @@ public class ShowPersonInfo : MonoBehaviour
     protected Transform statusImage;
 
     Person person;
-    GameManager gamemanager;
+    GameManagerr gamemanager;
 
     GameObject currentStatusImg;
     PersonStatus status;
 
     private void Start()
     {
-        gamemanager = GameManager.instance;
+        gamemanager = GameManagerr.instance;
         person = GetComponentInParent<Person>();
         image.sprite = person.icon;
     }

@@ -424,8 +424,12 @@ MonoBehaviour:
   peopleList:
   - {fileID: 595201469107527928, guid: 0f92f5a009f18a748996608f7caf7d70, type: 3}
   - {fileID: 595201469107527928, guid: 95df739f02557f54895ff9f4014d4949, type: 3}
+  - {fileID: 595201469107527928, guid: 95df739f02557f54895ff9f4014d4949, type: 3}
+  - {fileID: 595201469107527928, guid: ca16b51ac9927ef4f9ad11f14136ea2e, type: 3}
+  - {fileID: 595201469107527928, guid: 47f5a618d0ef1f74faac7b8d001c6124, type: 3}
   scale: {x: 0.4322796, y: 0.51386, z: 0.378982}
   delay: 5
+  interval: 5
   StatusSpriteList:
   - status: 5
     sprite: {fileID: 6847408651407227648, guid: 12d97e95ab2883145ad8f6aa8d7a725d,

@@ -32,8 +32,8 @@ public class Police : Person
     
     public override void OnAwake()
     {
-        prison = GameManager.instance.prisons[Random.Range(0, GameManager.instance.prisons.Length)].transform;
-        waitingroom = GameManager.instance.policeStations[Random.Range(0, GameManager.instance.policeStations.Length)];
+        prison = GameManagerr.instance.prisons[Random.Range(0, GameManagerr.instance.prisons.Length)].transform;
+        waitingroom = GameManagerr.instance.policeStations[Random.Range(0, GameManagerr.instance.policeStations.Length)];
     }
 
     public override void ReachTarget(ITargetable _target)

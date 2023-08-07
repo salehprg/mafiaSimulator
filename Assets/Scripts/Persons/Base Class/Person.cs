@@ -153,12 +153,16 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
                 }
                 else
                 {
-                    if (target != null)
-                        SetNewPosition(((MonoBehaviour)target).transform);
-                    else
+                    try
                     {
-                        print("Delte");
+                        if (target != null)
+                            SetNewPosition(((MonoBehaviour)target).transform);
                     }
+                    catch (System.Exception)
+                    {
+                        personStatus = PersonStatus.Idle;
+                    }
+
                 }
                 break;
 
@@ -328,7 +332,8 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
 
     private void OnDestroy()
     {
-        GetActivePerson()?.SetActivePerson(null);
+        GetActivePerson()?.SetTarget(null);
+        GetActivePerson()?.SetNewPosition(null);
         GetActivePerson()?.GoToWaitingRoom();
         SetActivePerson(null);
     }
