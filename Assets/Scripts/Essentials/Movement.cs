@@ -1,37 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class Movement : MonoBehaviour
 {
+    protected NavMeshAgent agent;
     public Transform goal;
     public float speed = 1;
-    public bool reachGoal;
+    public bool isReached;
 
     float stopDist;
+
+    private void Start()
+    {
+        isReached = false;
+        agent = GetComponent<NavMeshAgent>();
+        agent.enabled = true;
+        agent.baseOffset = 1;
+    }
 
     public void SetGoal(Transform goal, float stopDist = 1)
     {
         this.goal = goal;
+
+        if (goal == null)
+        {
+            agent.isStopped = true;
+            return;
+        }
+
+        agent.isStopped = false;
+        agent.speed = speed;
+        agent.stoppingDistance = stopDist;
         this.stopDist = stopDist;
+
+        agent.SetDestination(goal.position);
     }
 
     void Update()
     {
         if (goal != null)
-        {
-            if (Vector3.Distance(transform.position, goal.position) > stopDist)
-            {
-                reachGoal = false;
-                var newPos = Vector3.MoveTowards(transform.position, goal.position, speed * Time.deltaTime);
+            agent.SetDestination(goal.position);
+    }
 
-                var dest = new Vector3(newPos.x, transform.position.y, newPos.z);
-                transform.position = dest;
-            }
-            else
-            {
-                reachGoal = true;
-            }
-        }
+    public bool IsReached()
+    {
+        return goal != null && agent.remainingDistance <= agent.stoppingDistance;
     }
 }

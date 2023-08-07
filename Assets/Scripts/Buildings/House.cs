@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class House : Building
 {
+    public GameObject coinAnim;
+
     public override void Destroy()
     {
         Destroy(this.gameObject);
         print("House Destroyerd !");
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public override void PlayAnimation()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        if (activePerson != null)
+        {
+            var tmp = Instantiate(coinAnim, activePerson.transform.position, new Quaternion());
+            tmp.transform.SetParent(activePerson.transform);
+            Destroy(tmp, 1.8f);
+        }
     }
 }

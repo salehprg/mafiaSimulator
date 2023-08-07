@@ -6,12 +6,10 @@ using UnityEngine;
 public class Assassin : Person
 {
     public float killTime;
-    public Person myTarget;
-
-
+    public GameObject killAnim;
+    
     public override void ReachTarget(ITargetable _target)
     {
-        myTarget = (Person)_target;
         waitTime = Time.time + killTime;
     }
 
@@ -19,19 +17,27 @@ public class Assassin : Person
     {
         var _targets = targets;
         _targets = _targets.Where(x => x != ((ITargetable)this)
-        && (((Person)x).personStatus != PersonStatus.Prison || ((Person)x).personStatus != PersonStatus.Catched)
-         && ((Person)x).health > 0).ToList();
+                                    && ((Person)x).personStatus != PersonStatus.Prison
+                                    && ((Person)x).personStatus != PersonStatus.Catched
+                                    && ((Person)x).personStatus != PersonStatus.Dead).ToList();
 
         return _targets;
     }
 
-    public override void DoingJob()
+    public override void DoingJob(ITargetable target)
     {
         if (waitTime - Time.time < 0)
         {
-            myTarget.Kill();
+            (target as Person).Kill();
 
             FinishJob();
         }
+    }
+
+    public override void FinishJobPlayAnim(ITargetable target)
+    {
+        var tmp = Instantiate(killAnim, (target as MonoBehaviour).transform.position, new Quaternion());
+        tmp.transform.SetParent((target as MonoBehaviour).transform);
+        Destroy(tmp, 1.5f);
     }
 }

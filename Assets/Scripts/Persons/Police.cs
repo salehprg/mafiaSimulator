@@ -7,22 +7,21 @@ public class Police : Person
 {
     public float radius;
     public float jailTime;
-    public Person myTarget;
     public Transform prison;
 
     float _speed;
 
-    public bool Bribe(float amount)
+    public bool Bribe(ITargetable target, float amount)
     {
         if (amount > 0)
         {
             movement.speed = _speed;
-            
+
             wallet.DepositBalance(amount);
             GoToWaitingRoom();
 
-            myTarget.GoToWaitingRoom();
-            myTarget.FinishJob();
+            (target as Person).GoToWaitingRoom();
+            (target as Person).FinishJob();
             FinishJob();
 
             return true;
@@ -30,35 +29,37 @@ public class Police : Person
 
         return false;
     }
-
-    public override void Start()
+    
+    public override void OnAwake()
     {
-        base.Start();
-        waitingroom = center.gameObject;
-        _speed = movement.speed;
+        prison = GameManager.instance.prisons[Random.Range(0, GameManager.instance.prisons.Length)].transform;
+        waitingroom = GameManager.instance.policeStations[Random.Range(0, GameManager.instance.policeStations.Length)];
     }
 
     public override void ReachTarget(ITargetable _target)
     {
-        myTarget = (Person)_target;
-    }
+        var myTarget = _target as Person;
 
-    public override void DoingJob()
-    {
-        SetNewPosition(prison.transform);
+        _speed = movement.speed;
         movement.speed = myTarget.movement.speed;
+        SetNewPosition(prison.transform);
 
         myTarget.CatchByPolice();
-        myTarget.SetNewPosition(prison);
+        myTarget.SetNewPosition(this.transform);
+    }
 
-        if (Vector3.Distance(transform.position, prison.position) < 1)
+    public override void DoingJob(ITargetable target)
+    {
+        if (movement.IsReached())
         {
-            myTarget.KeepInJail(jailTime);
+            (target as Person).KeepInJail(jailTime);
+            (target as Person).SetNewPosition(prison);
             movement.speed = _speed;
 
             FinishJob();
         }
     }
+
 
     public override List<ITargetable> GetMyTargets()
     {

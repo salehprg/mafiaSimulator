@@ -21,4 +21,8 @@ public class Mine : Building
 
         return 0;
     }
+
+    public override void PlayAnimation(){
+
+    }
 }

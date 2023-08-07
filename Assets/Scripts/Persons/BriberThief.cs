@@ -28,7 +28,7 @@ public class BriberThief : Thief
                 var police = (Police)GetActivePerson();
                 float amount = wallet.WithdrawBalance(briberAmount);
 
-                if (police.Bribe(amount))
+                if (police.Bribe(this , amount))
                 {
                     setCoolDown = false;
                     FinishJob();

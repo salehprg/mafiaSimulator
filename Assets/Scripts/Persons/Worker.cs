@@ -14,7 +14,7 @@ public class Worker : Person
         waitTime = Time.time + building.waitTime;
     }
 
-    public override void DoingJob()
+    public override void DoingJob(ITargetable target)
     {
         if (waitTime - Time.time < 0)
         {

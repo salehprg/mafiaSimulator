@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{b28fb5b2-6244-0c6b-a872-40dd957e5fe0}</ProjectGuid>
+    <ProjectGuid>{46f7f87b-5969-96dd-afbd-856e4e04b368}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -45,12 +45,16 @@
      <Compile Include="Assets\Scripts\Interfaces\ITargetable.cs" />
      <Compile Include="Assets\Scripts\Persons\Miner.cs" />
      <Compile Include="Assets\Scripts\Persons\Thief.cs" />
+     <Compile Include="Assets\Scripts\UILookAt.cs" />
      <Compile Include="Assets\Scripts\Buildings\House.cs" />
      <Compile Include="Assets\Scripts\Gamemanager.cs" />
      <Compile Include="Assets\Scripts\Interfaces\IBuilding.cs" />
+     <Compile Include="Assets\Scripts\Camera Control.cs" />
      <Compile Include="Assets\Scripts\Persons\Assassin.cs" />
      <Compile Include="Assets\Scripts\Essentials\Movement.cs" />
      <Compile Include="Assets\Scripts\Persons\Healer.cs" />
+     <Compile Include="Assets\Scripts\ShowPersonInfo.cs" />
+     <Compile Include="Assets\Scripts\Enums\StatusSpriteKeys.cs" />
      <Compile Include="Assets\Scripts\Persons\BriberThief.cs" />
      <Compile Include="Assets\Scripts\Enums\BuildingTypes.cs" />
      <Compile Include="Assets\Scripts\Interfaces\IPerson.cs" />
@@ -61,6 +65,28 @@
      <Compile Include="Assets\Scripts\Essentials\Wallet.cs" />
      <Compile Include="Assets\Scripts\Buildings\Mine.cs" />
      <Compile Include="Assets\Scripts\Enums\PersonStatus.cs" />
+     <Compile Include="Assets\Scripts\Essentials\Splitter.cs" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
+     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
+     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
     <Reference Include="UnityEngine">
         <HintPath>D:\App\2022.3.6f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -686,46 +712,49 @@
         <HintPath>D:\App\2022.3.6f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Navigation">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.AI.Navigation.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.AI.Navigation.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PlasticSCM.Editor">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Navigation.Updater">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.AI.Navigation.Updater.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.AI.Navigation.Updater.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline.Editor">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Navigation.Editor">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.AI.Navigation.Editor.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.AI.Navigation.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Navigation.Editor.ConversionSystem">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.AI.Navigation.Editor.ConversionSystem.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.AI.Navigation.Editor.ConversionSystem.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-        <HintPath>D:\Saleh Ebrahimian\Mafia\New Unity Project\Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+        <HintPath>D:\Saleh Ebrahimian\Mafia\mafiaSimulator\Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

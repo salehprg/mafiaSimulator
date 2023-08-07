@@ -5,23 +5,20 @@ using UnityEngine;
 
 public class Healer : Person
 {
-    public float hillTime;
+    public float healTime;
     public float payment;
-    public Person myTarget;
-
 
     public override void ReachTarget(ITargetable _target)
     {
-        myTarget = (Person)_target;
-        waitTime = Time.time + hillTime;
+        waitTime = Time.time + healTime;
     }
 
-    public override void DoingJob()
+    public override void DoingJob(ITargetable target)
     {
         if (waitTime - Time.time < 0)
         {
-            myTarget.health = 100;
-            float amount = myTarget.wallet.WithdrawBalance(payment);
+            (target as Person).Heal();
+            float amount =  (target as Person).GetWallet().WithdrawBalance(payment);
             wallet.DepositBalance(amount);
 
             FinishJob();

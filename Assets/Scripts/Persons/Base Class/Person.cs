@@ -8,31 +8,65 @@ using UnityEditor;
 [RequireComponent(typeof(Wallet))]
 public abstract class Person : MonoBehaviour, IPerson, ITargetable
 {
-    public float idleTime = 1;
-    public float prisonTime = 0;
-    public float health = 100;
+    public Sprite icon;
+
+    [SerializeField]
+    protected float idleTime = 1;
+    protected float prisonTime = 0;
+    [SerializeField]
+    protected float health = 100;
+    protected float Health
+    {
+        set
+        {
+            health = value;
+            if (health <= 0)
+            {
+                deadTime = Time.time;
+                health = 0;
+                personStatus = PersonStatus.Dead;
+                target?.SetActivePerson(null);
+                movement?.SetGoal(null, 0);
+            }
+            else
+            {
+                if (personStatus == PersonStatus.Dead)
+                {
+                    personStatus = PersonStatus.Idle;
+                }
+            }
+        }
+        get { return health; }
+    }
     public PersonStatus personStatus;
 
-    public Transform center;
-    public List<BuildingTypes> buildingTypes;
-    public List<PersonTypes> personTypes;
-    public ITargetable target;
-    public Person activePerson;
+    [SerializeField]
+    protected Transform center;
+    [SerializeField]
+    protected List<BuildingTypes> buildingTypes;
+    [SerializeField]
+    protected List<PersonTypes> personTypes;
+    [SerializeField]
+    protected Person activePerson;
+    private ITargetable target;
 
     protected float waitTime;
+    protected float deadTime;
 
     protected GameObject waitingroom;
     protected List<ITargetable> targets;
 
     public Movement movement;
-    public Wallet wallet;
+    protected Wallet wallet;
 
     private void Awake()
     {
         movement = GetComponent<Movement>();
         wallet = GetComponent<Wallet>();
+
+        OnAwake();
     }
-    public virtual void Start()
+    private void Start()
     {
         prisonTime = 0;
 
@@ -45,23 +79,31 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
         waitingroom = rooms[indx];
 
         FindAllTargets();
+
+        OnStart();
     }
+
+    public virtual void OnAwake() { }
+    public virtual void OnStart() { }
 
     void UpdateStatus()
     {
+        if (health > 0 && target == null)
+        {
+            personStatus = PersonStatus.Idle;
+        }
+
         if (activePerson?.health <= 0)
         {
             SetActivePerson(null);
         }
 
-        if (health <= 0)
-        {
-            personStatus = PersonStatus.Dead;
-        }
-        else
+        if (health > 0)
         {
             if (personStatus == PersonStatus.Dead)
+            {
                 personStatus = PersonStatus.Idle;
+            }
         }
     }
 
@@ -78,6 +120,8 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
             case PersonStatus.Idle:
                 if (waitTime < Time.time)
                 {
+                    OnIdle();
+
                     var _target = FindNewTarget();
                     if (_target != null)
                     {
@@ -90,20 +134,31 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
                     {
                         GoToWaitingRoom();
                     }
-                }else{
+                }
+                else
+                {
                     GoToWaitingRoom();
                 }
                 break;
 
             case PersonStatus.Working:
-                DoingJob();
+                DoingJob(target);
                 break;
 
             case PersonStatus.GoingToWork:
-                if (movement.reachGoal)
+                if (movement.IsReached())
                 {
                     personStatus = PersonStatus.Working;
                     ReachTarget(target);
+                }
+                else
+                {
+                    if (target != null)
+                        SetNewPosition(((MonoBehaviour)target).transform);
+                    else
+                    {
+                        print("Delte");
+                    }
                 }
                 break;
 
@@ -122,7 +177,13 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
 
     public void Kill()
     {
-        this.health = 0;
+        this.Health = 0;
+    }
+
+    public void Heal()
+    {
+        this.Health = 100;
+        personStatus = PersonStatus.Idle;
     }
 
     public virtual List<ITargetable> GetMyTargets()
@@ -189,10 +250,15 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
             }
         }
     }
+    public virtual void OnIdle() { }
 
     public virtual ITargetable FindNewTarget()
     {
+        FindAllTargets();
         var _targets = GetMyTargets();
+
+        if (_targets == null)
+            return null;
 
         int indx = Random.Range(0, _targets.Count);
         if (_targets.Count == 0)
@@ -200,7 +266,7 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
 
         var temp = _targets[indx];
 
-        if (temp.GetActivePerson() != null)
+        if (temp.GetActivePerson() != null && temp.GetActivePerson() != this)
             return null;
 
         return temp;
@@ -234,6 +300,8 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
         waitTime = Time.time + idleTime;
 
         personStatus = PersonStatus.Idle;
+
+        FinishJobPlayAnim(target);
     }
 
     public void GoToWaitingRoom()
@@ -242,7 +310,37 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
         if (waitingroom != null)
             movement.SetGoal(waitingroom.transform, 1);
     }
-    public abstract void ReachTarget(ITargetable target);
 
-    public abstract void DoingJob();
+    public Wallet GetWallet()
+    {
+        return wallet;
+    }
+
+    public float GetDeadTime()
+    {
+        return deadTime;
+    }
+
+    public float GetWaitingTime()
+    {
+        return waitTime;
+    }
+
+    private void OnDestroy()
+    {
+        GetActivePerson()?.SetActivePerson(null);
+        GetActivePerson()?.GoToWaitingRoom();
+        SetActivePerson(null);
+    }
+
+    public abstract void ReachTarget(ITargetable target);
+    public abstract void DoingJob(ITargetable target);
+    public virtual void FinishJobPlayAnim(ITargetable target) { }
+
+    public void SetTarget(ITargetable targetable)
+    {
+        target = targetable;
+    }
 }
+
+

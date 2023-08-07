@@ -8,6 +8,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1318009396625171580, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1732740609818866024, guid: 2d13b33a44e1d05488d58192450b93a6,
         type: 3}
       propertyPath: speed
@@ -100,15 +105,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b733c491d077bfd45927d4122d3df0a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: 15ae4bf75f76e1e4ea43ac7b175478e7, type: 3}
   idleTime: 1
-  prisonTime: 0
   health: 100
   personStatus: 0
   center: {fileID: 0}
   buildingTypes: 
   personTypes: 08000000
-  activePerson: {fileID: 0}
   movement: {fileID: 0}
-  wallet: {fileID: 0}
   stoletime: 1
   moneyStole: 4

@@ -5,21 +5,16 @@ using UnityEngine;
 
 public class Miner : Person
 {
-    public Building building;
-
-
     public override void ReachTarget(ITargetable _target)
     {
-        building = (Building)_target;
-
-        waitTime = Time.time + building.waitTime;
+        waitTime = Time.time + (_target as Building).waitTime;
     }
 
-    public override void DoingJob()
+    public override void DoingJob(ITargetable _target)
     {
         if (waitTime - Time.time < 0)
         {
-            float amount = building.GetMoney();
+            float amount = (_target as Building).GetMoney();
             wallet.DepositBalance(amount);
 
             FinishJob();

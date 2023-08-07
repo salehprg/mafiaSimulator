@@ -13,6 +13,7 @@ public abstract class Building : MonoBehaviour, IBuilding, ITargetable
 
     public virtual float GetMoney()
     {
+        PlayAnimation();
         CheckForDestroy();
         return payment;
     }
@@ -27,10 +28,13 @@ public abstract class Building : MonoBehaviour, IBuilding, ITargetable
             Destroy();
         }
     }
-    public abstract void Destroy();
 
     public Person GetActivePerson()
     {
         return activePerson;
     }
+
+    public abstract void Destroy();
+    public abstract void PlayAnimation();
+
 }

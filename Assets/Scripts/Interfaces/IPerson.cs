@@ -9,6 +9,10 @@ public interface IPerson
     void FindAllTargets();
     ITargetable FindNewTarget();
     void SetNewPosition(Transform newTransfor);
+    void SetTarget(ITargetable targetable);
     void CatchByPolice();
+    float GetDeadTime();
+    float GetWaitingTime();
+    Wallet GetWallet();
 
 }

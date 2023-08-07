@@ -7,27 +7,23 @@ public class Thief : Person
 {
     public float stoletime;
     public float moneyStole;
-    public ITargetable myTarget;
-
-
+    
     public override void ReachTarget(ITargetable _target)
     {
-        myTarget = _target;
-
         waitTime = Time.time + stoletime;
     }
 
-    public override void DoingJob()
+    public override void DoingJob(ITargetable target)
     {
         if (waitTime - Time.time < 0)
         {
             var money = 0.0f;
 
-            if (myTarget.GetType().BaseType == typeof(Person))
-                money = ((Person)myTarget).wallet.WithdrawBalance(moneyStole);
+            if (target.GetType().BaseType == typeof(Person))
+                money = ((Person)target).GetWallet().WithdrawBalance(moneyStole);
 
-            if (myTarget.GetType().BaseType == typeof(Building))
-                money = ((Building)myTarget).GetMoney();
+            if (target.GetType().BaseType == typeof(Building))
+                money = ((Building)target).GetMoney();
 
             wallet.DepositBalance(money);
 
@@ -38,7 +34,8 @@ public class Thief : Person
     public override List<ITargetable> GetMyTargets()
     {
         var _targets = targets.Where(x => x.GetType().BaseType == typeof(Person) 
-                                        && (((Person)x).personStatus != PersonStatus.Prison || ((Person)x).personStatus != PersonStatus.Catched));
+                                        && ((Person)x).personStatus != PersonStatus.Prison 
+                                        && ((Person)x).personStatus != PersonStatus.Catched);
 
 
         return _targets.ToList();
