@@ -14,48 +14,44 @@ public class ShowPersonInfo : MonoBehaviour
     [SerializeField]
     protected Transform statusImage;
 
-    Person person;
-    GameManagerr gamemanager;
-
-    GameObject currentStatusImg;
-    PersonStatus status;
 
     private void Start()
     {
-        gamemanager = GameManagerr.instance;
-        person = GetComponentInParent<Person>();
+        var person = GetComponentInParent<Person>();
         image.sprite = person.icon;
+    }
+
+    public void ShowStatus(PersonStatus personStatus)
+    {
+        GameObject icon;
+
+        if (statusImage.childCount > 0)
+        {
+            for (int i = 0; i < statusImage.childCount; i++)
+            {
+                var temp = statusImage.GetChild(i);
+                Destroy(temp.gameObject);
+            }
+
+        }
+
+
+        if (GameManagerr.instance.statusSprites.TryGetValue(personStatus, out icon))
+        {
+            textMesh.gameObject.SetActive(false);
+            statusImage.gameObject.SetActive(true);
+            Instantiate(icon, statusImage);
+        }
+        else
+        {
+            statusImage.gameObject.SetActive(false);
+            textMesh.gameObject.SetActive(true);
+        }
     }
 
     private void Update()
     {
-        if (person != null)
-        {
-            GameObject icon;
-            if (status != person.personStatus && gamemanager.statusSprites.TryGetValue(person.personStatus, out icon))
-            {
-                status = person.personStatus;
-                
-                if (currentStatusImg != null)
-                    Destroy(currentStatusImg);
 
-                textMesh.gameObject.SetActive(false);
-                statusImage.gameObject.SetActive(true);
-                currentStatusImg = Instantiate(icon, statusImage);
-            }
-            else if(!gamemanager.statusSprites.ContainsKey(person.personStatus))
-            {
-                status = person.personStatus;
-
-                if (currentStatusImg != null)
-                    Destroy(currentStatusImg);
-
-                statusImage.gameObject.SetActive(false);
-                textMesh.gameObject.SetActive(true);
-            }
-
-            textMesh.text = person.personStatus.ToString().ToLowercaseNamingConvention();
-        }
     }
 
 }

@@ -12,11 +12,14 @@ public class Mine : Building
 
     public override float GetMoney()
     {
-        float amount = base.GetMoney();
+        float amount = payment;
 
         if (store_money - amount >= 0)
         {
             store_money -= amount;
+
+            PlayAnimation();
+            CheckForDestroy();
             return amount;
         }
 

@@ -107,8 +107,10 @@ MonoBehaviour:
   center: {fileID: 0}
   buildingTypes: 
   personTypes: 
+  activePerson: {fileID: 0}
   movement: {fileID: 0}
   stoletime: 1
   moneyStole: 5
+  thiefAnim: {fileID: 42794930622588856, guid: 6d27205e07f83644e9dbbdd362799844, type: 3}
   coolDownTime: 3
   briberAmount: 7

@@ -112,6 +112,8 @@ MonoBehaviour:
   center: {fileID: 0}
   buildingTypes: 
   personTypes: 08000000
+  activePerson: {fileID: 0}
   movement: {fileID: 0}
   healTime: 1
   payment: 5
+  healAnim: {fileID: 42794930622588856, guid: b13cf9f02311dd24dadd6b90ba3935d2, type: 3}

@@ -23,9 +23,6 @@ public class Miner : Person
 
     public override List<ITargetable> GetMyTargets()
     {
-        var _targets = targets;
-        _targets = _targets.Where(x => ((Building)x).store_money > 0).ToList();
-
-        return _targets;
+        return  targets.Where(x => ((Building)x).store_money > 0).ToList();
     }
 }

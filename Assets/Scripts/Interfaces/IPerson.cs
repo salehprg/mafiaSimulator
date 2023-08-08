@@ -4,15 +4,28 @@ using UnityEngine;
 
 public interface IPerson
 {
-    void Kill();
     List<ITargetable> GetMyTargets();
-    void FindAllTargets();
     ITargetable FindNewTarget();
+    Person GetActivePerson();
+    Wallet GetWallet();
+    Movement GetMovement();
+
+    void FindAllTargets();
     void SetNewPosition(Transform newTransfor);
     void SetTarget(ITargetable targetable);
     void CatchByPolice();
     float GetDeadTime();
-    float GetWaitingTime();
-    Wallet GetWallet();
+    void FinishJob();
+    void KeepInJail(float _prisonTime);
 
+    void SetActivePerson(IPerson person);
+    void OnIdle();
+    void FinishJobPlayAnim(ITargetable target);
+    void StatusChanged(PersonStatus pers);
+    void Heal();
+    void Kill();
+    void GoToWaitingRoom();
+
+    abstract void ReachTarget(ITargetable target);
+    abstract void DoingJob(ITargetable target);
 }

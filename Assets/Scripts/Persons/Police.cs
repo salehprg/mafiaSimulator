@@ -9,6 +9,7 @@ public class Police : Person
     public float jailTime;
     public Transform prison;
 
+    bool goingToJail = false;
     float _speed;
 
     public bool Bribe(ITargetable target, float amount)
@@ -33,24 +34,34 @@ public class Police : Person
     public override void OnAwake()
     {
         prison = GameManagerr.instance.prisons[Random.Range(0, GameManagerr.instance.prisons.Length)].transform;
+    }
+
+    public override void OnStart(){
         waitingroom = GameManagerr.instance.policeStations[Random.Range(0, GameManagerr.instance.policeStations.Length)];
     }
 
+
     public override void ReachTarget(ITargetable _target)
     {
+        goingToJail = true;
+
         var myTarget = _target as Person;
 
         _speed = movement.speed;
-        movement.speed = myTarget.movement.speed;
-        SetNewPosition(prison.transform);
+        movement.speed = myTarget.GetMovement().speed;
+        SetNewPosition(myTarget.transform);
 
         myTarget.CatchByPolice();
-        myTarget.SetNewPosition(this.transform);
+        myTarget.SetNewPosition(prison.transform);
     }
 
     public override void DoingJob(ITargetable target)
     {
-        if (movement.IsReached())
+        if(goingToJail && Vector3.Distance(transform.position , prison.position) < 5){
+            goingToJail = false;
+        }
+
+        if (movement.IsReached() && !goingToJail)
         {
             (target as Person).KeepInJail(jailTime);
             (target as Person).SetNewPosition(prison);
@@ -63,21 +74,9 @@ public class Police : Person
 
     public override List<ITargetable> GetMyTargets()
     {
-        var _targets = new List<ITargetable>();
-        _targets.AddRange(targets);
-
-        foreach (var targ in targets)
-        {
-            var prsn = (Person)targ;
-
-            if (prsn.personStatus == PersonStatus.Dead || prsn.personStatus == PersonStatus.Prison || prsn.personStatus == PersonStatus.Catched
-                || Vector3.Distance(((MonoBehaviour)targ).transform.position, transform.position) > radius)
-            {
-                _targets.Remove(targ);
-            }
-        }
-
-        return _targets;
+        return targets.Where(x => ((Person)x).personStatus == PersonStatus.Idle 
+                                    || ((Person)x).personStatus == PersonStatus.Working 
+                                    || ((Person)x).personStatus == PersonStatus.GoingToWork).ToList();
     }
 
 }

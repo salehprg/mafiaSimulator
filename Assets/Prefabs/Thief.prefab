@@ -112,6 +112,8 @@ MonoBehaviour:
   center: {fileID: 0}
   buildingTypes: 
   personTypes: 08000000
+  activePerson: {fileID: 0}
   movement: {fileID: 0}
   stoletime: 1
   moneyStole: 4
+  thiefAnim: {fileID: 42794930622588856, guid: 6d27205e07f83644e9dbbdd362799844, type: 3}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,19 +25,22 @@ public class Movement : MonoBehaviour
     public void SetGoal(Transform goal, float stopDist = 1)
     {
         this.goal = goal;
-
-        if (goal == null)
+        try
         {
-            agent.isStopped = true;
-            return;
+            if (goal == null)
+            {
+                agent.isStopped = true;
+                return;
+            }
+            
+            agent.isStopped = false;
+            agent.speed = speed;
+            agent.stoppingDistance = stopDist;
+            this.stopDist = stopDist;
+
+            agent.SetDestination(goal.position);
         }
-
-        agent.isStopped = false;
-        agent.speed = speed;
-        agent.stoppingDistance = stopDist;
-        this.stopDist = stopDist;
-
-        agent.SetDestination(goal.position);
+        catch (Exception) { }
     }
 
     void Update()

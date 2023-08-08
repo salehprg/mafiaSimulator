@@ -15,13 +15,11 @@ public class Assassin : Person
 
     public override List<ITargetable> GetMyTargets()
     {
-        var _targets = targets;
-        _targets = _targets.Where(x => x != ((ITargetable)this)
+        return targets.Where(x => x != ((ITargetable)this)
                                     && ((Person)x).personStatus != PersonStatus.Prison
                                     && ((Person)x).personStatus != PersonStatus.Catched
                                     && ((Person)x).personStatus != PersonStatus.Dead).ToList();
 
-        return _targets;
     }
 
     public override void DoingJob(ITargetable target)

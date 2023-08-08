@@ -10,6 +10,9 @@ public abstract class Building : MonoBehaviour, IBuilding, ITargetable
     public float waitTime;
     public Person activePerson;
 
+    private void Start() {
+        GameManagerr.instance.AddBuilding(this);
+    }
 
     public virtual float GetMoney()
     {
@@ -25,13 +28,17 @@ public abstract class Building : MonoBehaviour, IBuilding, ITargetable
 
     public virtual void CheckForDestroy(){
         if(store_money <= 0){
-            Destroy();
+            Destroy(this.gameObject);
         }
     }
 
     public Person GetActivePerson()
     {
         return activePerson;
+    }
+
+    private void OnDestroy() {
+        GameManagerr.instance.RemoveBuilding(this);
     }
 
     public abstract void Destroy();

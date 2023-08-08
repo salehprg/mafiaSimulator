@@ -7,7 +7,7 @@ public class Thief : Person
 {
     public float stoletime;
     public float moneyStole;
-    
+    public GameObject thiefAnim;
     public override void ReachTarget(ITargetable _target)
     {
         waitTime = Time.time + stoletime;
@@ -33,11 +33,16 @@ public class Thief : Person
 
     public override List<ITargetable> GetMyTargets()
     {
-        var _targets = targets.Where(x => x.GetType().BaseType == typeof(Person) 
+        return targets.Where(x => x.GetType().BaseType == typeof(Person) 
                                         && ((Person)x).personStatus != PersonStatus.Prison 
-                                        && ((Person)x).personStatus != PersonStatus.Catched);
+                                        && ((Person)x).personStatus != PersonStatus.Catched).ToList();
 
+    }
 
-        return _targets.ToList();
+    public override void FinishJobPlayAnim(ITargetable target)
+    {
+        var tmp = Instantiate(thiefAnim, transform.position, new Quaternion());
+        tmp.transform.SetParent(transform);
+        Destroy(tmp, 1f);
     }
 }

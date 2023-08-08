@@ -7,6 +7,7 @@ public class Healer : Person
 {
     public float healTime;
     public float payment;
+    public GameObject healAnim;
 
     public override void ReachTarget(ITargetable _target)
     {
@@ -18,7 +19,7 @@ public class Healer : Person
         if (waitTime - Time.time < 0)
         {
             (target as Person).Heal();
-            float amount =  (target as Person).GetWallet().WithdrawBalance(payment);
+            float amount = (target as Person).GetWallet().WithdrawBalance(payment);
             wallet.DepositBalance(amount);
 
             FinishJob();
@@ -27,10 +28,13 @@ public class Healer : Person
 
     public override List<ITargetable> GetMyTargets()
     {
-        var _targets = targets;
-        _targets = _targets.Where(x => ((Person)x).personStatus == PersonStatus.Dead).ToList();
-
-        return _targets;
+        return targets.Where(x => ((Person)x).personStatus == PersonStatus.Dead).ToList();
     }
 
+    public override void FinishJobPlayAnim(ITargetable target)
+    {
+        var tmp = Instantiate(healAnim, (target as MonoBehaviour).transform.position, new Quaternion());
+        tmp.transform.SetParent((target as MonoBehaviour).transform);
+        Destroy(tmp, 1f);
+    }
 }

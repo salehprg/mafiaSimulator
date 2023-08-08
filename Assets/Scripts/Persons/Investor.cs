@@ -30,9 +30,8 @@ public class Investor : Person
         }
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
-        base.Update();
         if (health > 0)
         {
             if (personStatus == PersonStatus.Dead || personStatus == PersonStatus.Idle)

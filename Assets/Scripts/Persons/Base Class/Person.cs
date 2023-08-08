@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEditor;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Movement))]
 [RequireComponent(typeof(Wallet))]
 public abstract class Person : MonoBehaviour, IPerson, ITargetable
 {
+
     public Sprite icon;
 
     [SerializeField]
     protected float idleTime = 1;
-    protected float prisonTime = 0;
+
     [SerializeField]
     protected float health = 100;
     protected float Health
@@ -38,31 +40,50 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
         }
         get { return health; }
     }
-    public PersonStatus personStatus;
+
+    PersonStatus Person_status;
+    public PersonStatus personStatus
+    {
+        get { return Person_status; }
+        set
+        {
+            if (Person_status != value)
+            {
+                StatusChanged(value);
+                showPersonInfo.ShowStatus(value);
+            }
+            Person_status = value;
+        }
+    }
 
     [SerializeField]
-    protected Transform center;
+    protected List<BuildingType> buildingTypes;
     [SerializeField]
-    protected List<BuildingTypes> buildingTypes;
-    [SerializeField]
-    protected List<PersonTypes> personTypes;
+    protected List<PersonType> personTypes;
     [SerializeField]
     protected Person activePerson;
-    private ITargetable target;
 
     protected float waitTime;
     protected float deadTime;
-
     protected GameObject waitingroom;
-    protected List<ITargetable> targets;
-
-    public Movement movement;
+    protected List<ITargetable> targets = new List<ITargetable>();
+    protected Movement movement;
     protected Wallet wallet;
+
+    ShowPersonInfo showPersonInfo;
+    float prisonTime = 0;
+    ITargetable target;
+
+    int frameSkip = 0;
+    int iter = 0;
 
     private void Awake()
     {
         movement = GetComponent<Movement>();
         wallet = GetComponent<Wallet>();
+        showPersonInfo = GetComponentInChildren<ShowPersonInfo>();
+
+        GameManagerr.instance.AddPerson(this);
 
         OnAwake();
     }
@@ -70,7 +91,6 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
     {
         prisonTime = 0;
 
-        targets = new List<ITargetable>();
         personStatus = PersonStatus.Idle;
 
         var rooms = GameObject.FindGameObjectsWithTag("room");
@@ -78,17 +98,22 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
 
         waitingroom = rooms[indx];
 
-        FindAllTargets();
+        showPersonInfo.ShowStatus(Person_status);
 
+        frameSkip = Random.Range(1, 10);
+        FindAllTargets();
         OnStart();
     }
 
-    public virtual void OnAwake() { }
-    public virtual void OnStart() { }
 
     void UpdateStatus()
     {
-        if (health > 0 && target == null)
+        if (health > 0 && target == null && personStatus != PersonStatus.Idle && personStatus != PersonStatus.Catched)
+        {
+            personStatus = PersonStatus.Idle;
+        }
+
+        if (personStatus == PersonStatus.Catched && activePerson == null)
         {
             personStatus = PersonStatus.Idle;
         }
@@ -107,9 +132,15 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
         }
     }
 
-    public virtual void Update()
+    public void Update()
     {
-        UpdateStatus();
+        try{
+        iter++;
+
+        if (iter % frameSkip == 0)
+            return;
+            
+            UpdateStatus();
 
         switch (personStatus)
         {
@@ -134,6 +165,8 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
                     {
                         GoToWaitingRoom();
                     }
+
+                    waitTime = Time.time + idleTime;
                 }
                 else
                 {
@@ -177,6 +210,9 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
                 return;
         }
 
+        OnUpdate();
+        }
+        catch(System.Exception) {}
     }
 
     public void Kill()
@@ -211,17 +247,17 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
     public void FindAllTargets()
     {
         targets = new List<ITargetable>();
-
         foreach (var type in buildingTypes)
         {
             switch (type)
             {
-                case BuildingTypes.House:
-                    targets.AddRange(FindObjectsOfType<House>().ToList());
+                case BuildingType.House:
+                    targets.AddRange(GameManagerr.instance.GetBuildings(typeof(House)));
                     break;
 
-                case BuildingTypes.Mine:
-                    targets.AddRange(FindObjectsOfType<Mine>().ToList());
+                case BuildingType.Mine:
+                    var result = GameManagerr.instance.GetBuildings(typeof(Mine));
+                    targets.AddRange(result);
                     break;
             }
         }
@@ -230,38 +266,112 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
         {
             switch (type)
             {
-                case PersonTypes.All:
-                    targets.AddRange(FindObjectsOfType<Person>().ToList());
+                case PersonType.All:
+                    targets.AddRange(GameManagerr.instance.GetPerson(typeof(Person)));
                     break;
-                case PersonTypes.Worker:
-                    targets.AddRange(FindObjectsOfType<Worker>().ToList());
+                case PersonType.Worker:
+                    targets.AddRange(GameManagerr.instance.GetPerson(typeof(Worker)));
                     break;
-                case PersonTypes.Investor:
-                    targets.AddRange(FindObjectsOfType<Investor>().ToList());
+                case PersonType.Investor:
+                    targets.AddRange(GameManagerr.instance.GetPerson(typeof(Investor)));
                     break;
-                case PersonTypes.Thief:
-                    targets.AddRange(FindObjectsOfType<Thief>().ToList());
+                case PersonType.Thief:
+                    targets.AddRange(GameManagerr.instance.GetPerson(typeof(Thief)));
                     break;
-                case PersonTypes.BriberThief:
-                    targets.AddRange(FindObjectsOfType<BriberThief>().ToList());
+                case PersonType.BriberThief:
+                    targets.AddRange(GameManagerr.instance.GetPerson(typeof(BriberThief)));
                     break;
-                case PersonTypes.Miner:
-                    targets.AddRange(FindObjectsOfType<Miner>().ToList());
+                case PersonType.Miner:
+                    targets.AddRange(GameManagerr.instance.GetPerson(typeof(Miner)));
                     break;
-                case PersonTypes.Assassin:
-                    targets.AddRange(FindObjectsOfType<Assassin>().ToList());
+                case PersonType.Assassin:
+                    targets.AddRange(GameManagerr.instance.GetPerson(typeof(Assassin)));
                     break;
             }
         }
     }
-    public virtual void OnIdle() { }
 
+    public void CatchByPolice()
+    {
+        personStatus = PersonStatus.Catched;
+    }
+    public void KeepInJail(float _prisonTime)
+    {
+        prisonTime = Time.time + _prisonTime;
+        personStatus = PersonStatus.Prison;
+    }
+    public void FinishJob()
+    {
+        target?.SetActivePerson(null);
+        personStatus = PersonStatus.Idle;
+
+        FinishJobPlayAnim(target);
+    }
+
+    public void GoToWaitingRoom()
+    {
+        personStatus = PersonStatus.Idle;
+        if (waitingroom != null)
+            SetNewPosition(waitingroom.transform);
+    }
+
+    private void OnDestroy()
+    {
+        GameManagerr.instance.RemovePerson(this);
+        GetActivePerson()?.SetTarget(null);
+        GetActivePerson()?.SetNewPosition(null);
+        GetActivePerson()?.GoToWaitingRoom();
+        SetActivePerson(null);
+    }
+
+    public Wallet GetWallet()
+    {
+        return wallet;
+    }
+    public float GetDeadTime()
+    {
+        return deadTime;
+    }
+    public void SetTarget(ITargetable targetable)
+    {
+        target = targetable;
+    }
+
+    public Movement GetMovement()
+    {
+        return movement;
+    }
+    public Person GetActivePerson()
+    {
+        return activePerson;
+    }
+
+    public void SetActivePerson(IPerson person)
+    {
+        activePerson = (Person)person;
+    }
+    public void SetNewPosition(Transform newTransfor)
+    {
+        movement.SetGoal(newTransfor);
+    }
+
+
+    public abstract void ReachTarget(ITargetable target);
+    public abstract void DoingJob(ITargetable target);
+
+    public virtual void OnAwake() { }
+    public virtual void OnStart() { }
+    public virtual void OnUpdate() { }
+
+    public virtual void OnIdle() { }
+    public virtual void FinishJobPlayAnim(ITargetable target) { }
+    public virtual void StatusChanged(PersonStatus pers) { }
     public virtual ITargetable FindNewTarget()
     {
         FindAllTargets();
         var _targets = GetMyTargets();
 
-        if (_targets == null)
+        if (!_targets.Any())
             return null;
 
         int indx = Random.Range(0, _targets.Count);
@@ -276,76 +386,6 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
         return temp;
     }
 
-    public Person GetActivePerson()
-    {
-        return activePerson;
-    }
-
-    public void SetActivePerson(IPerson person)
-    {
-        activePerson = (Person)person;
-    }
-    public void SetNewPosition(Transform newTransfor)
-    {
-        movement.SetGoal(newTransfor);
-    }
-    public void CatchByPolice()
-    {
-        personStatus = PersonStatus.Catched;
-    }
-    public void KeepInJail(float _prisonTime)
-    {
-        prisonTime = Time.time + _prisonTime;
-        personStatus = PersonStatus.Prison;
-    }
-    public void FinishJob()
-    {
-        target?.SetActivePerson(null);
-        waitTime = Time.time + idleTime;
-
-        personStatus = PersonStatus.Idle;
-
-        FinishJobPlayAnim(target);
-    }
-
-    public void GoToWaitingRoom()
-    {
-        personStatus = PersonStatus.Idle;
-        if (waitingroom != null)
-            movement.SetGoal(waitingroom.transform, 1);
-    }
-
-    public Wallet GetWallet()
-    {
-        return wallet;
-    }
-
-    public float GetDeadTime()
-    {
-        return deadTime;
-    }
-
-    public float GetWaitingTime()
-    {
-        return waitTime;
-    }
-
-    private void OnDestroy()
-    {
-        GetActivePerson()?.SetTarget(null);
-        GetActivePerson()?.SetNewPosition(null);
-        GetActivePerson()?.GoToWaitingRoom();
-        SetActivePerson(null);
-    }
-
-    public abstract void ReachTarget(ITargetable target);
-    public abstract void DoingJob(ITargetable target);
-    public virtual void FinishJobPlayAnim(ITargetable target) { }
-
-    public void SetTarget(ITargetable targetable)
-    {
-        target = targetable;
-    }
 }
 
 

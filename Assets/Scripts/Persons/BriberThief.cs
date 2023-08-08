@@ -11,10 +11,8 @@ public class BriberThief : Thief
     float briberTime = 0;
     bool setCoolDown = false;
 
-    public override void Update()
+    public override void OnUpdate()
     {
-        base.Update();
-
         if (personStatus == PersonStatus.Catched)
         {
             if (!setCoolDown)
