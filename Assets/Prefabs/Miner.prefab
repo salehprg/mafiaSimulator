@@ -8,12 +8,32 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 590167917512598939, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2c5c1518b27d5074a806c31e54a07180, type: 2}
     - target: {fileID: 1732740609818866024, guid: 2d13b33a44e1d05488d58192450b93a6,
         type: 3}
       propertyPath: speed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5099759132929232456, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2c5c1518b27d5074a806c31e54a07180, type: 2}
     - target: {fileID: 5142143767484672597, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2c5c1518b27d5074a806c31e54a07180, type: 2}
+    - target: {fileID: 5846158977566109990, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2c5c1518b27d5074a806c31e54a07180, type: 2}
+    - target: {fileID: 6833690662567629226, guid: 2d13b33a44e1d05488d58192450b93a6,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -100,11 +120,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5509e2f79598004a81a49556ce930ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnDeadEvent:
+    m_PersistentCalls:
+      m_Calls: []
   icon: {fileID: 21300000, guid: f8f7a49e767ad5c4dba92ed0f8ee4749, type: 3}
   idleTime: 1
   health: 100
-  personStatus: 0
-  center: {fileID: 0}
   buildingTypes: 01000000
   personTypes: 
-  movement: {fileID: 0}
+  activePerson: {fileID: 0}

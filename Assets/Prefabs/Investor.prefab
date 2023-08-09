@@ -8,12 +8,32 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 590167917512598939, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 42363f5f4707e5849a0b149a1a254a28, type: 2}
     - target: {fileID: 1318009396625171580, guid: 2d13b33a44e1d05488d58192450b93a6,
         type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5099759132929232456, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 42363f5f4707e5849a0b149a1a254a28, type: 2}
     - target: {fileID: 5142143767484672597, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 42363f5f4707e5849a0b149a1a254a28, type: 2}
+    - target: {fileID: 5846158977566109990, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 42363f5f4707e5849a0b149a1a254a28, type: 2}
+    - target: {fileID: 6833690662567629226, guid: 2d13b33a44e1d05488d58192450b93a6,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -100,15 +120,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510e19b42c6a049478a0afd24aebfce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnDeadEvent:
+    m_PersistentCalls:
+      m_Calls: []
   icon: {fileID: 21300000, guid: 2c7f605ec65bfc942ae1706021462ea5, type: 3}
   idleTime: 1
   health: 100
-  personStatus: 0
-  center: {fileID: 0}
   buildingTypes: 
   personTypes: 
   activePerson: {fileID: 0}
-  movement: {fileID: 0}
   investAmount: 5
   coinAnim: {fileID: 1699203962674669136, guid: d1630d0c683a22d4bab2de2e04b146bc,
     type: 3}

@@ -9,6 +9,8 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Wallet))]
 public abstract class Person : MonoBehaviour, IPerson, ITargetable
 {
+    public UnityEvent OnDeadEvent;
+    public UnityEvent OnHealEvent;
 
     public Sprite icon;
 
@@ -29,6 +31,8 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
                 personStatus = PersonStatus.Dead;
                 target?.SetActivePerson(null);
                 movement?.SetGoal(null, 0);
+
+                OnDeadEvent?.Invoke();
             }
             else
             {
@@ -89,6 +93,10 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
     }
     private void Start()
     {
+        var animcontroll = GetComponent<AnimationController>();
+        OnHealEvent.AddListener(animcontroll.OnHeal);
+        OnDeadEvent.AddListener(animcontroll.OnDead);
+
         prisonTime = 0;
 
         personStatus = PersonStatus.Idle;
@@ -108,7 +116,7 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
 
     void UpdateStatus()
     {
-        if (health > 0 && target == null && personStatus != PersonStatus.Idle && personStatus != PersonStatus.Catched)
+        if (health > 0 && (target == null || ((MonoBehaviour)target).gameObject == null) && personStatus != PersonStatus.Idle && personStatus != PersonStatus.Catched)
         {
             personStatus = PersonStatus.Idle;
         }
@@ -134,85 +142,85 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
 
     public void Update()
     {
-        try{
-        iter++;
-
-        if (iter % frameSkip == 0)
-            return;
-            
+        try
+        {
             UpdateStatus();
 
-        switch (personStatus)
-        {
-            case PersonStatus.Dead:
-                SetActivePerson(null);
-                return;
+            switch (personStatus)
+            {
+                case PersonStatus.Dead:
+                    SetActivePerson(null);
+                    return;
 
-            case PersonStatus.Idle:
-                if (waitTime < Time.time)
-                {
-                    OnIdle();
-
-                    var _target = FindNewTarget();
-                    if (_target != null)
+                case PersonStatus.Idle:
+                    if (waitTime < Time.time)
                     {
-                        target = _target;
-                        target.SetActivePerson(this);
-                        movement.SetGoal(((MonoBehaviour)target).transform);
-                        personStatus = PersonStatus.GoingToWork;
+                        OnIdle();
+
+                        var _target = FindNewTarget();
+                        if (_target != null)
+                        {
+                            target = _target;
+                            target.SetActivePerson(this);
+                            movement.SetGoal(((MonoBehaviour)target).transform);
+                            personStatus = PersonStatus.GoingToWork;
+                        }
+                        else
+                        {
+                            GoToWaitingRoom();
+                        }
+
+                        waitTime = Time.time + idleTime;
                     }
                     else
                     {
                         GoToWaitingRoom();
                     }
+                    break;
 
-                    waitTime = Time.time + idleTime;
-                }
-                else
-                {
-                    GoToWaitingRoom();
-                }
-                break;
+                case PersonStatus.Working:
+                    DoingJob(target);
+                    break;
 
-            case PersonStatus.Working:
-                DoingJob(target);
-                break;
-
-            case PersonStatus.GoingToWork:
-                if (movement.IsReached())
-                {
-                    personStatus = PersonStatus.Working;
-                    ReachTarget(target);
-                }
-                else
-                {
-                    try
+                case PersonStatus.GoingToWork:
+                    if (movement.IsReached())
                     {
-                        if (target != null)
-                            SetNewPosition(((MonoBehaviour)target).transform);
+                        personStatus = PersonStatus.Working;
+                        ReachTarget(target);
                     }
-                    catch (System.Exception)
+                    else
+                    {
+                        try
+                        {
+                            if (target != null)
+                                SetNewPosition(((MonoBehaviour)target).transform);
+                        }
+                        catch (System.Exception)
+                        {
+                            personStatus = PersonStatus.Idle;
+                        }
+
+                    }
+                    break;
+
+                case PersonStatus.Catched:
+                    break;
+
+                case PersonStatus.Prison:
+                    if (prisonTime < Time.time)
                     {
                         personStatus = PersonStatus.Idle;
                     }
+                    return;
 
-                }
-                break;
+                case PersonStatus.DoNothing:
+                    movement.Pause();
+                    break;
+            }
 
-            case PersonStatus.Catched:
-                break;
-
-            case PersonStatus.Prison:
-                if (prisonTime < Time.time)
-                {
-                    personStatus = PersonStatus.Idle;
-                }
-                return;
+            OnUpdate();
         }
-
-        OnUpdate();
-        }
-        catch(System.Exception) {}
+        catch (System.Exception ex) { print(ex.Message);}
     }
 
     public void Kill()
@@ -222,6 +230,7 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
 
     public void Heal()
     {
+        OnHealEvent?.Invoke();
         this.Health = 100;
         personStatus = PersonStatus.Idle;
     }
@@ -293,6 +302,8 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
 
     public void CatchByPolice()
     {
+        target.SetActivePerson(null);
+        target = null;
         personStatus = PersonStatus.Catched;
     }
     public void KeepInJail(float _prisonTime)
