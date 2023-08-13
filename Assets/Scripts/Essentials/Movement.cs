@@ -50,7 +50,7 @@ public class Movement : MonoBehaviour
 
             agent.SetDestination(goal.position);
         }
-        catch (Exception) { }
+        catch (Exception ex) { print($"{this} {ex.Message}");}
     }
 
     void Update()

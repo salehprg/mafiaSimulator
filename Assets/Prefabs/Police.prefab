@@ -13,6 +13,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 93ba00e07859a7249b37e31ad3c6b529, type: 2}
+    - target: {fileID: 1055448121509218303, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 93ba00e07859a7249b37e31ad3c6b529, type: 2}
     - target: {fileID: 1318009396625171580, guid: 2d13b33a44e1d05488d58192450b93a6,
         type: 3}
       propertyPath: m_Enabled
@@ -21,8 +26,13 @@ PrefabInstance:
     - target: {fileID: 1732740609818866024, guid: 2d13b33a44e1d05488d58192450b93a6,
         type: 3}
       propertyPath: speed
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3324887382819150861, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 93ba00e07859a7249b37e31ad3c6b529, type: 2}
     - target: {fileID: 5099759132929232456, guid: 2d13b33a44e1d05488d58192450b93a6,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -48,6 +58,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Police
       objectReference: {fileID: 0}
+    - target: {fileID: 8099157463164876547, guid: 2d13b33a44e1d05488d58192450b93a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 93ba00e07859a7249b37e31ad3c6b529, type: 2}
     - target: {fileID: 8393053256299850969, guid: 2d13b33a44e1d05488d58192450b93a6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -126,6 +141,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OnDeadEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealEvent:
     m_PersistentCalls:
       m_Calls: []
   icon: {fileID: 21300000, guid: dbde175248c739945af6de7c68c462dd, type: 3}
