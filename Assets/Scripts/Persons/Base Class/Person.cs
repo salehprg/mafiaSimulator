@@ -220,7 +220,7 @@ public abstract class Person : MonoBehaviour, IPerson, ITargetable
 
             OnUpdate();
         }
-        catch (System.Exception ex) { print(ex.Message);}
+        catch (System.Exception ex) {}
     }
 
     public void Kill()
